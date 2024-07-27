@@ -116,7 +116,7 @@ app.post("/send-data", async (req, res) => {
         })
     }
     recipient.send(JSON.stringify({
-        data: data,
+        data: {...data, date: new Date().toISOString()},
         notification: notification
     }))
     res.json({
