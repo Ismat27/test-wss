@@ -31,7 +31,6 @@ wss.on('connection', (ws, req) => {
             const clientId = parsedMessage.clientId;
             clients.set(clientId, ws);
             ws.clientId = clientId;
-            console.log(`Client ID set: ${clientId}`);
         } else if (parsedMessage.type == "getConnection") {
             const keys = clients.keys()
             const connections = []
@@ -102,7 +101,7 @@ app.get("/publish", async (req, res) => {
 })
 
 app.post("/send-data", async (req, res) => {
-    const { recipientId } = req.body
+    const { recipientId, data, notification } = req.body
     if (!recipientId) {
         return res.status(400).json({
             message: "Recipient Id not included",
@@ -117,7 +116,8 @@ app.post("/send-data", async (req, res) => {
         })
     }
     recipient.send(JSON.stringify({
-        data: "Data"
+        data: data,
+        notification: notification
     }))
     res.json({
         success: true,
